@@ -8,72 +8,94 @@ import 'package:flutter_news_app/src/pages/newsDetail/bloc/bloc.dart';
 import 'package:flutter_news_app/src/theme/theme.dart';
 
 class VideoNewsPage extends StatelessWidget {
+  const VideoNewsPage({super.key});
+
   Widget _headerNews(BuildContext context, Article article) {
     return InkWell(
-        onTap: () {
-          BlocProvider.of<DetailBloc>(context)
-              .add(SelectNewsForDetail(article: article));
-          Navigator.pushNamed(context, '/detail');
-        },
-        child: Container(
-            width: MediaQuery.of(context).size.width * 6,
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(0),
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
+      onTap: () {
+        context.read<DetailBloc>().add(SelectNewsForDetail(article: article));
+        Navigator.pushNamed(context, '/detail');
+      },
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(0),
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: <Widget>[
+              customImage(article.urlToImage, fit: BoxFit.cover),
+              // Gradient overlay for readability
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(left: 20, right: 10, bottom: 20),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [Colors.black54, Colors.transparent],
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    article.urlToImage == null
-                        ? Container()
-                        : customImage(article.urlToImage, fit: BoxFit.fitWidth),
-                    Container(
-                      padding: EdgeInsets.only(left: 20, right: 10, bottom: 20),
-                      alignment: Alignment.bottomCenter,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Text(article.title,
-                              style: AppTheme.h2Style.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface)),
-                          Text(article.getTime(),
-                              style: AppTheme.subTitleStyle.copyWith(
-                                  color: Theme.of(context).disabledColor))
-                        ],
+                    Text(
+                      article.title ?? 'No Title',
+                      style: AppTheme.h2Style.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: _playWidget(context),
-                        ))
+                    const SizedBox(height: 5),
+                    Text(
+                      article.getTime(),
+                      style: AppTheme.subTitleStyle.copyWith(
+                        color: Theme.of(context).disabledColor,
+                      ),
+                    ),
                   ],
-                ))));
+                ),
+              ),
+              // Play button
+              Positioned(
+                bottom: 10,
+                right: 10,
+                child: _playWidget(context),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _playWidget(BuildContext context) {
-    return SizedBox(
-        height: 25,
-        child: FittedBox(
-            fit: BoxFit.contain,
-            child: Container(
-                height: 25,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).bottomAppBarColor),
-                child: Icon(
-                  Icons.play_arrow,
-                  color: Theme.of(context).disabledColor,
-                  size: 25,
-                ))));
+    return Container(
+      height: 45,
+      width: 45,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4,
+            offset: const Offset(2, 2),
+          ),
+        ],
+      ),
+      child: Icon(
+        Icons.play_arrow,
+        color: Theme.of(context).colorScheme.onSurface,
+        size: 28,
+      ),
+    );
   }
 
   Widget _body(
     BuildContext context,
     List<Article> list, {
-    String type,
+    required String type,
   }) {
     return CustomScrollView(
       slivers: <Widget>[
@@ -81,29 +103,37 @@ class VideoNewsPage extends StatelessWidget {
           centerTitle: true,
           title: Text(
             '${type.toUpperCase()} NEWS',
-            style: AppTheme.h2Style
-                .copyWith(color: Theme.of(context).primaryColor),
+            style: AppTheme.h2Style.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
           ),
-          backgroundColor: Theme.of(context).bottomAppBarColor,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           pinned: true,
+          floating: true,
+          elevation: 3,
         ),
+        // Top featured carousel
         SliverToBoxAdapter(
-            child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: PageView.builder(
-                  itemBuilder: (context, index) {
-                    return _headerNews(context, list[index]);
-                  },
-                  itemCount: 5,
-                ))),
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: PageView.builder(
+              itemCount: list.length < 5 ? list.length : 5,
+              itemBuilder: (context, index) =>
+                  _headerNews(context, list[index]),
+            ),
+          ),
+        ),
+        // List of news articles
         SliverList(
-            delegate: SliverChildBuilderDelegate(
-                (context, index) => NewsCard(
-                      artical: list[index],
-                      isVideoNews: true,
-                      type: type.toUpperCase(),
-                    ),
-                childCount: list.length)),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => NewsCard(
+              article: list[index],
+              isVideoNews: true,
+              type: type.toUpperCase(),
+            ),
+            childCount: list.length,
+          ),
+        ),
       ],
     );
   }
@@ -111,24 +141,23 @@ class VideoNewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: SafeArea(
-            child: BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-          if (state == null) {
-            return Center(child: Text('Null block'));
-          }
-          if (state is Failure) {
-            return Center(child: Text('Something went wrong'));
-          }
-          if (state is Loaded) {
-            if (state.items == null || state.items.isEmpty) {
-              return Text('No content avilable');
-            } else {
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: SafeArea(
+        child: BlocBuilder<NewsBloc, NewsState>(
+          builder: (context, state) {
+            if (state is Failure) {
+              return const Center(child: Text('Something went wrong'));
+            } else if (state is Loaded) {
+              if (state.items.isEmpty) {
+                return const Center(child: Text('No content available'));
+              }
               return _body(context, state.items, type: state.type);
+            } else {
+              return const Center(child: CircularProgressIndicator());
             }
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        })));
+          },
+        ),
+      ),
+    );
   }
 }

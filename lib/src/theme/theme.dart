@@ -1,80 +1,98 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_news_app/src/theme/color/dark_color.dart';
-
-import 'color/lightColor.dart';
+import 'package:flutter_news_app/src/theme/color/lightColor.dart';
 
 class AppTheme {
   const AppTheme();
-  static ThemeData lightTheme = ThemeData(
-    primarySwatch: Colors.blue,
-    backgroundColor: LightColor.background,
+
+  // 🌞 LIGHT THEME
+  static final ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    scaffoldBackgroundColor: LightColor.background,
     primaryColor: LightColor.purple,
-    accentColor: LightColor.lightblack,
-    primaryColorDark: LightColor.Darker,
-    primaryColorLight: LightColor.brighter,
-    cardTheme: CardTheme(color: LightColor.background),
-    textTheme: ThemeData.light().textTheme,
+
+    // Use CardThemeData (new expected type) instead of CardTheme
+    cardTheme: CardThemeData(
+      color: LightColor.background,
+      surfaceTintColor: Colors.transparent,
+    ),
+
     iconTheme: IconThemeData(color: LightColor.lightblack),
-    bottomAppBarColor: LightColor.background,
     dividerColor: LightColor.lightGrey,
     disabledColor: LightColor.darkgrey,
-    colorScheme: ColorScheme(
-        primary: LightColor.purple,
-        primaryVariant: LightColor.purple,
-        secondary: LightColor.lightBlue,
-        secondaryVariant: LightColor.darkBlue,
-        surface: LightColor.background,
-        background: LightColor.background,
-        error: Colors.red,
-        onPrimary: LightColor.Darker,
-        onSecondary: LightColor.background,
-        onSurface: LightColor.Darker,
-        onBackground: LightColor.titleTextColor,
-        onError: LightColor.titleTextColor,
-        brightness: Brightness.dark),
+
+    colorScheme: const ColorScheme(
+      brightness: Brightness.light,
+      primary: LightColor.purple,
+      onPrimary: LightColor.Darker,
+      secondary: LightColor.lightBlue,
+      onSecondary: LightColor.background,
+      tertiary: LightColor.lightpurple,
+      onTertiary: LightColor.background,
+      error: Colors.red,
+      onError: LightColor.titleTextColor,
+      background: LightColor.background,
+      onBackground: LightColor.titleTextColor,
+      surface: LightColor.background,
+      onSurface: LightColor.Darker,
+    ),
+
+    // Use BottomAppBarThemeData (new expected type) instead of BottomAppBarTheme
+    bottomAppBarTheme: BottomAppBarThemeData(
+      surfaceTintColor: LightColor.background,
+      shadowColor: Colors.transparent,
+    ),
   );
-  static ThemeData darkTheme = ThemeData(
-    primarySwatch: Colors.blue,
-    backgroundColor: DarkColor.background,
+
+  // 🌚 DARK THEME
+  static final ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    scaffoldBackgroundColor: DarkColor.background,
     primaryColor: DarkColor.purple,
-    accentColor: DarkColor.lightblack,
-    primaryColorDark: DarkColor.Darker,
-    primaryColorLight: DarkColor.brighter,
-    cardTheme: CardTheme(color: DarkColor.background),
-    textTheme: ThemeData.dark()
-        .textTheme
-        .copyWith(bodyText1: TextStyle(color: DarkColor.titleTextColor)),
+
+    cardTheme: CardThemeData(
+      color: DarkColor.background,
+      surfaceTintColor: Colors.transparent,
+    ),
+
     iconTheme: IconThemeData(color: DarkColor.lightblack),
-    bottomAppBarColor: DarkColor.lightblack,
-    dividerColor: LightColor.subTitleTextColor,
-    colorScheme: ColorScheme(
-        primary: DarkColor.purple,
-        primaryVariant: DarkColor.purple,
-        secondary: DarkColor.lightBlue,
-        secondaryVariant: DarkColor.darkBlue,
-        surface: DarkColor.background,
-        background: DarkColor.background,
-        error: Colors.red,
-        onPrimary: DarkColor.white,
-        onSecondary: DarkColor.Darker,
-        onSurface: DarkColor.white,
-        onBackground: DarkColor.titleTextColor,
-        onError: DarkColor.titleTextColor,
-        brightness: Brightness.dark),
+    dividerColor: DarkColor.lightblack,
+    disabledColor: DarkColor.darkBlue,
+
+    colorScheme: const ColorScheme(
+      brightness: Brightness.dark,
+      primary: DarkColor.purple,
+      onPrimary: DarkColor.white,
+      secondary: DarkColor.lightBlue,
+      onSecondary: DarkColor.Darker,
+      tertiary: DarkColor.brighter,
+      onTertiary: DarkColor.white,
+      error: Colors.red,
+      onError: DarkColor.titleTextColor,
+      background: DarkColor.background,
+      onBackground: DarkColor.titleTextColor,
+      surface: DarkColor.background,
+      onSurface: DarkColor.white,
+    ),
+
+    bottomAppBarTheme: BottomAppBarThemeData(
+      surfaceTintColor: DarkColor.lightblack,
+      shadowColor: Colors.transparent,
+    ),
   );
 
-  static TextStyle titleStyle =
-      const TextStyle(color: LightColor.titleTextColor, fontSize: 16);
-  static TextStyle subTitleStyle =
-      const TextStyle(color: LightColor.subTitleTextColor, fontSize: 12);
+  // 📖 Text styles
+  static const TextStyle titleStyle =
+      TextStyle(color: LightColor.titleTextColor, fontSize: 16);
 
-  static TextStyle h1Style =
-      const TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
-  static TextStyle h2Style = const TextStyle(fontSize: 22);
-  static TextStyle h3Style = const TextStyle(fontSize: 20);
-  static TextStyle h4Style = const TextStyle(fontSize: 18);
-  static TextStyle h5Style = const TextStyle(fontSize: 16);
-  static TextStyle h6Style = const TextStyle(fontSize: 14);
+  static const TextStyle subTitleStyle =
+      TextStyle(color: LightColor.subTitleTextColor, fontSize: 12);
+
+  static const TextStyle h1Style =
+      TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+  static const TextStyle h2Style = TextStyle(fontSize: 22);
+  static const TextStyle h3Style = TextStyle(fontSize: 20);
+  static const TextStyle h4Style = TextStyle(fontSize: 18);
+  static const TextStyle h5Style = TextStyle(fontSize: 16);
+  static const TextStyle h6Style = TextStyle(fontSize: 14);
 }

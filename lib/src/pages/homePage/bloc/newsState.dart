@@ -1,27 +1,34 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:flutter_news_app/src/models/newsResponseModel.dart';
 
 abstract class NewsState extends Equatable {
   const NewsState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class Loading extends NewsState {}
+class Loading extends NewsState {
+  const Loading();
+}
 
 class Loaded extends NewsState {
   final List<Article> items;
   final String type;
 
-  const Loaded({@required this.items, this.type});
+  const Loaded({
+    required this.items,
+    required this.type,
+  });
 
   @override
-  List<Object> get props => [items];
+  List<Object?> get props => [items, type];
 
   @override
-  String toString() => 'Loaded { items: ${items.length} }';
+  String toString() => 'Loaded { items: ${items.length}, type: $type }';
 }
 
-class Failure extends NewsState {}
+class Failure extends NewsState {
+  const Failure();
+}

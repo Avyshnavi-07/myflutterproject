@@ -2,19 +2,19 @@ import 'package:equatable/equatable.dart';
 
 class ThemeState extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class SelectedTheme extends ThemeState {
   final ThemeType themeType;
 
-  SelectedTheme({this.themeType});
+  SelectedTheme({required this.themeType});
 
   @override
-  List<Object> get props => [themeType];
+  List<Object?> get props => [themeType];
 
   @override
-  String toString() => 'Theme Selected ';
+  String toString() => 'Theme Selected: $themeType';
 }
 
 enum ThemeType { Light, Dark }

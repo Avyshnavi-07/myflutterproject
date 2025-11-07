@@ -5,21 +5,26 @@ abstract class DetailState extends Equatable {
   const DetailState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class LoadingDetail extends DetailState {}
+class LoadingDetail extends DetailState {
+  const LoadingDetail();
+}
 
-class FailureDetail extends DetailState {}
+class FailureDetail extends DetailState {
+  const FailureDetail();
+}
 
 class LoadedArticle extends DetailState {
   final Article selectedArticle;
 
-  LoadedArticle({this.selectedArticle});
+  const LoadedArticle({required this.selectedArticle});
 
   @override
-  List<Object> get props => [selectedArticle];
+  List<Object?> get props => [selectedArticle];
 
   @override
-  String toString() => 'LoadedArticle { items: ${selectedArticle.source} }';
+  String toString() =>
+      'LoadedArticle { source: ${selectedArticle.source?.name ?? "Unknown"} }';
 }

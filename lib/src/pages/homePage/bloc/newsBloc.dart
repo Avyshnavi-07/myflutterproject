@@ -8,19 +8,18 @@ import 'newsState.dart';
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final Repository repository;
 
-  NewsBloc({this.repository}) : super(Loading());
+  NewsBloc({required this.repository}) : super(Loading()) {
+    on<Fetch>(_onFetch);
+  }
 
-  @override
-  Stream<NewsState> mapEventToState(NewsEvent event) async* {
-    if (event is Fetch) {
-      try {
-        yield Loading();
-        final items = await repository.fetchAllNews(category: event.type);
-        yield Loaded(items: items, type: event.type);
-      } catch (error) {
-        log("Error", error: error);
-        yield Failure();
-      }
+  Future<void> _onFetch(Fetch event, Emitter<NewsState> emit) async {
+    try {
+      emit(Loading());
+      final items = await repository.fetchAllNews(category: event.type);
+      emit(Loaded(items: items, type: event.type));
+    } catch (error, stackTrace) {
+      log("Error fetching news", error: error, stackTrace: stackTrace);
+      emit(Failure());
     }
   }
 }
